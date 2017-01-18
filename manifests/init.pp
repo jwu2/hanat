@@ -13,18 +13,6 @@ class hanat (
 
   ){
 
-  if ! defined(Package['iptables-persistent']){
-    package { 'iptables-persistent':
-      ensure  => present,
-    }
-  }
-
-  if ! defined(Package['awscli']){
-    package { 'awscli':
-      ensure  => present,
-    }
-  }
-
   sysctl { 'net.ipv4.ip_forward':
     value     => '1',
     require   => Package['iptables-persistent']
@@ -64,6 +52,6 @@ class hanat (
   exec { $filename:
     command     => "${scriptfile} >> ${logfile} &",
     unless      => "/bin/ps cax | grep ${filename}",
-    require     => File[$scriptfile]
+    require     => [File[$scriptfile],Package['awscli']]
   }
 }
