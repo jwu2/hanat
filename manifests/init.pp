@@ -13,6 +13,10 @@ class hanat (
 
   ){
 
+  if ! defined(Package['awscli']) {
+    package {'awscli': }
+  }
+
   sysctl { 'net.ipv4.ip_forward':
     value     => '1',
     require   => Package['iptables-persistent']
